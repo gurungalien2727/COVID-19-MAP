@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>COVID-19 Website</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:700, 600,500,400,300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
+    />
+	<link rel="stylesheet" href="main.css" />
+	<link rel="stylesheet" href="./css/style.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="main.js"></script>
+
+    <style>
+       span{font-weight: bold;}
+     table{
+    font-family:arial,sans-serif;
+    border-collapse:collapse;
+    width:60%;
+  
+}
+
+td,th{
+    border:1px solid #cccccc;
+    padding-top: 1px;
+  padding-right: 20px;
+  padding-bottom: 1px;
+  padding-left: 20px;
+}
+
+tr:nth-child(even){
+
+   background-color:#cccccc;
+}
+      #see-my-location-button {
+        display: block;
+        font-weight: 800;
+        margin: auto;
+        margin-bottom: 15px;
+    
+      }
+      span{font-weight: bold;}
+      .ad {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        border: 1px solid #ddd;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 250px;
+        z-index: 10;
+      }
+      
+    </style>
+    <script type="text/javascript">
+      $(function () {
+        $(".close").click(function () {
+          $(".ad").css("display", "none");
+        });
+      });
+    </script>
+  </head>
+  <body>
+	<header>
+		<div class="container">
+			<div id="branding">
+				<h1> Troy University <span style="font-weight: lighter; font-size: smaller;"> | COVID-19 MAP</span></h1>
+			</div>
+			<nav>
+				<ul>
+					<li class="current"><a href="home.html">Home</a></li>
+			
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+    <div class="header">
+      <div class="logo">
+        <i class="fa fa-tachometer"></i>
+        <span>Troy University</span>
+      </div>
+      <a href="#" class="nav-trigger"><span></span></a>
+    </div>
+    <div class="side-nav">
+      <nav>
+        <ul>
+          <li>
+            <a href="3dmap.html">
+             
+              <span> 3D World Map</span>
+            </a>
+          </li>
+          <li>
+            <a href="flatmap.html">
+              <span>World Map</span>
+            </a>
+          </li>
+         
+        </ul>
+	  </nav>
+
+  </div>
+  <div>
+    <br/>
+  <label for="input" style="margin-left: 30%" id="que">Enter the name of a country : </label>
+  <input  type="text" name="input" id="userinput">
+  <button id="btn"> Enter</button>
+  
+  <p id="output" style="margin-left: 25%;"></span> </p>
+    <div class="main-content">
+      <div class="title">
+        Corona Virus Cases
+      </div>
+      <br/>
+      <table style="margin:auto; font-size:30px ">
+        <thead>
+          <tr>
+            <th>Country </th>
+            <th>Total Cases</th>
+            <th>Todays Cases</th>
+            <th>Deaths</th>
+            <th>Recovered</th>
+            <th>Active Cases</th>
+          <tr>
+            <thead>
+      
+            <tbody id="tableData"></tbody>
+      
+      
+      </table>
+      
+     
+	</div>
+	<footer>
+		<p>Troy University, Copyright &copy; 2020</p>
+	</footer>
+  </body>
+
+  <script>
+
+    let request = new XMLHttpRequest();
+      request.open("GET", "https://coronavirus-19-api.herokuapp.com/countries");
+      request.responseType = "json";
+      request.send();
+      request.onload = () => {
+        console.log(request);
+        if (request.status === 200) {
+          let info = request.response;
+          console.log(info);
+          // alert(info);
+          var tableBody = document.getElementById('tableData');
+          var dataHTML = "";
+          for (var i = 0; i <info.length; i++) {
+           // alert(info[i].country+" "+info[i].cases);
+    
+          dataHTML += '<tr><td>' + info[i].country + '<td>' + info[i].cases + '<td>' + info[i].todayCases + '<td> ' + info[i].deaths + '<td>' + info[i].recovered + '<td>' + info[i].active  + '</tr>';
+          }
+          tableBody.innerHTML = dataHTML;
+        } else {
+          console.log(`error ${request.status}) $ {request.statusText}`);
+        }
+      };
+      let r = new XMLHttpRequest();
+
+
+        document.getElementById("btn").addEventListener("click", function () {
+          
+          var countryName = document.getElementById('userinput').value;
+
+          r.open("GET", " https://coronavirus-19-api.herokuapp.com/countries/" + countryName + "");
+          //request.open("GET", " https://coronavirus-19-api.herokuapp.com/countries/");
+          r.responseType = 'json';
+          r.send();
+          r.onload = () => {
+            console.log(r);
+            if (r.status === 200) {
+              let data = r.response;
+              console.log(data);
+              document.getElementById('output').innerHTML = "Country: "+data.country+ "  |   Total Cases: " + data.cases +"  |   Todays cases: " + data.todayCases+"  |   Deaths: " + data.deaths + "  |  Recovered: " + data.recovered + "  |   Active cases: " + data.active  ;
+
+
+            }
+            else {
+              console.log(`error ${request.status}) $ {request.statusText}`);
+            }
+          }
+
+        });
+
+
+  </script>
+
+</html>

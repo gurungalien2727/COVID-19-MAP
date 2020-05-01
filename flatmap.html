@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>World Map</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:700, 600,500,400,300" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="./css/style.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <script src="main.js"></script>
+
+    <style>
+        span {
+            font-weight: bold;
+        }
+  table{border:ridge 2px black;}
+  table td       {border:inset 1px #000;}
+  table tr#ROW1  {background-color:lightseagreen; color:white;}
+  table tr#ROW2  {background-color:white;}
+ 
+  table td#CELL9 {border:inset 4px red; background-color:navy;}
+      #see-my-location-button {
+        display: block;
+        font-weight: 800;
+        margin: auto;
+        margin-bottom: 15px;
+    
+      }
+
+
+        .ad {
+            position: absolute;
+            width: 300px;
+            height: 250px;
+            border: 1px solid #ddd;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 250px;
+            z-index: 10;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $(".close").click(function () {
+                $(".ad").css("display", "none");
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1> World Map</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="current"><a href="home.html">Home</a></li>
+                  
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="header">
+        <div class="logo">
+            <i class="fa fa-tachometer"></i>
+            <span>Troy University</span>
+        </div>
+        <a href="#" class="nav-trigger"><span></span></a>
+    </div>
+    <div class="side-nav">
+        <nav>
+            <ul>
+                <li>
+                    <a href="3dmap.html">
+
+                        <span> 3D World Map</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="flatmap.html">
+                        <span>World Map</span>
+                    </a>
+                </li>     
+                
+            </ul>
+        </nav>
+
+    </div>
+    
+    <div class="main-content">
+        
+            <div  class="row" style="height: 300px;width: 300;" style="float:left">
+                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                    <div id="worldmap"></div>
+                </div>
+            </div>
+
+        
+        <table style="float:right; margin-right: 60px;">
+            <tr id="ROW1">
+                <td>Colors</td>
+                <td>Cases</td>
+    
+            </tr>
+            <tr id="ROW2">
+                <td style="background-color: red;"></td>
+                <td> > 100,000</td>
+    
+            </tr>
+            <tr id="ROW3">
+                <td style="background-color:yellow;"></td>
+                <td>> 50,000</td>
+    
+            </tr>
+            <tr id="ROW3">
+                <td style="background-color:white;"></td>
+                <td>> 10,000</td>
+    
+            </tr>
+            <tr id="ROW3">
+                <td style="background-color:cyan;"></td>
+                <td>> 1,000</td>
+    
+            </tr>
+    
+            <tr id="ROW3">
+                <td style="background-color:#0D47A1;"></td>
+                <td>Less than Thousand</td>
+    
+            </tr>
+        </table>
+    
+    </div>
+   
+</body>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+<script src="dist/jquery.twism.js"></script>
+<script type="text/javascript" src="data.json"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#worldmap').twism("create",
+            {
+                map: "world",
+                border: "black",
+                disableCountries: ['ar'],
+
+            }, function () {
+
+                for (i = 0; i < data.length; i++) {
+                    //alert(data[i].code);
+                    name = data[i].code;
+                    cn = data[i].name;
+
+                    name = name.toLowerCase();
+
+                    num = data[i].cases;
+                    color = 'red';
+
+                    if (num > 100000) {
+                        var color = "red";
+                    } else if (num > 50000) {
+                        var color = "yellow";
+                    }
+                    else if (num > 10000) {
+                        var color = "white";
+                    }
+                    else if (num > 1000) {
+                        var color = "cyan";
+                    }
+                    else {
+                        var color = "#0D47A1";
+                    }
+
+                    $('#worldmap').twism("setCountry", {
+                        name: name,
+                        color: color,
+                        //  hoverColor: "yellow",
+                        //hoverBorder: "purple",
+                    });
+                }
+            });
+    });
+
+</script>
+
+</html>
